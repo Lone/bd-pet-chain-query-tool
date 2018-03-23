@@ -3,6 +3,7 @@
  * @param {Object} options [可选]
  * @config {Integer} options.maxPage  最多查询的页数, 可选
  * @config {Array} options.conf 各级别狗狗可接受的价格， 可选
+ * @config {Integer} options.type 查询类型 0=狗狗集市，1=繁育中心
  *
  * @example:
  * startQueryPets({maxPage: 30});
