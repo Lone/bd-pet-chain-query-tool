@@ -6,14 +6,27 @@
  *
  * @example:
  * startQueryPets({maxPage: 30});
+ * startQueryPets({maxPage: 50, type: 1, conf: [0,200,300,400,1000,1000]});
  */
 function startQueryPets (options) {
     options = options || {};
     var maxPage = options.maxPage || 10;
     var lib = 'c3e5ef7'; //这个是js最终产出的包名，会有根据实际变化，具体如何获得参见RM文档
     var conf = options.conf || [0, 800, 1000, 2000, 4000, 5000];
-    var rareName = ['普通', '稀有', '卓越', '史诗', '神话', '传说'];
+    var type = options.type || 0;
     var app = require(lib);
+    var apiConf = [
+        {
+            method: 'queryPetsOnSale',
+            channel: 'market',
+            result: 'petsOnSale'
+        },
+        {
+            method: 'getBreedList',
+            channel: 'breed',
+            result: 'pets4Breed'
+        }
+    ];
     var opt = {
         pageNo: 1,
         pageSize: 10,
@@ -28,20 +41,29 @@ function startQueryPets (options) {
         nounce: null,
         token: null
     };
+    var rareName = ['普通', '稀有', '卓越', '史诗', '神话', '传说'];
     
     function queryPets () {
-        app.api.queryPetsOnSale(opt)
+        var _config = apiConf[type];
+        
+        if (!_config || !app.api[_config.method]) {
+            return;
+        }
+        app.api[_config.method](opt)
         .then(function (res) {
             var data = res.data;
             if (!data.hasData) return;
-            for(var index=0, length=data.petsOnSale.length; index < length; index ++) {
-                var pet = data.petsOnSale[index];
+            var list = data[_config.result];
+            if (!list) return;
+            var host = 'https://pet-chain.baidu.com';
+            
+            for(var index=0, length=list.length; index < length; index ++) {
+                var pet = list[index];
                 var rare = pet.rareDegree;
                 var price = parseFloat(pet.amount);
                 if (price < conf[rare]) {
-                    var url = 'https://pet-chain.baidu.com';
-                    url += '/chain/detail?channel=market&petId='+ pet.petId;
-                    console.log(rareName[rare], price, url);            
+                    var url = '/chain/detail?channel=' + _config.channel + '&petId='+ pet.petId;
+                    console.log(rareName[rare], price, host+url);            
                 }
                 opt.petIds.push(pet.petId);
                 opt.lastAmount = pet.amount;
@@ -54,3 +76,4 @@ function startQueryPets (options) {
     }
     queryPets();
 }
+
