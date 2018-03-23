@@ -6,8 +6,9 @@
  * @config {Integer} options.type 查询类型 0=狗狗集市，1=繁育中心
  *
  * @example:
- * startQueryPets({maxPage: 30});
- * startQueryPets({maxPage: 50, type: 1, conf: [0,200,300,400,1000,1000]});
+ * startQueryPets(); //以默认价格查询10页狗市
+ * startQueryPets({maxPage: 30});  //以默认价格查询30页狗市
+ * startQueryPets({maxPage: 50, type: 1, conf: [0,200,300,400,1000,1000]}); //以自定义价格查询50页繁育中心
  */
 function startQueryPets (options) {
     options = options || {};
