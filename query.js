@@ -65,7 +65,7 @@ function startQueryPets (options) {
                 var price = parseFloat(pet.amount);
                 if (price < conf[rare]) {
                     var url = '/chain/detail?channel=' + _config.channel + '&petId='+ pet.petId;
-                    console.log(rareName[rare], price, host+url);            
+                    console.log(rareName[rare]+pet.generation+'代', pet.coolingInterval, price, host+url);            
                 }
                 opt.petIds.push(pet.petId);
                 opt.lastAmount = pet.amount;
