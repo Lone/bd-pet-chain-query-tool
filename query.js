@@ -21,12 +21,14 @@ function startQueryPets (options) {
         {
             method: 'queryPetsOnSale',
             channel: 'market',
-            result: 'petsOnSale'
+            result: 'petsOnSale',
+            time: 'coolingInterval'
         },
         {
             method: 'getBreedList',
             channel: 'breed',
-            result: 'pets4Breed'
+            result: 'pets4Breed',
+            time: 'incubateTime'
         }
     ];
     var opt = {
@@ -65,7 +67,7 @@ function startQueryPets (options) {
                 var price = parseFloat(pet.amount);
                 if (price < conf[rare]) {
                     var url = '/chain/detail?channel=' + _config.channel + '&petId='+ pet.petId;
-                    console.log(rareName[rare]+pet.generation+'代', pet.coolingInterval, price, host+url);            
+                    console.log(rareName[rare]+pet.generation+'代', pet[_config.time], price, host+url);            
                 }
                 opt.petIds.push(pet.petId);
                 opt.lastAmount = pet.amount;
